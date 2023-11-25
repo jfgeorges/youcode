@@ -1,9 +1,10 @@
 // src/components/layout/Header.tsx
 import { SiteConfig } from "@/lib/site-config";
 import Link from "next/link";
+import Image from "next/image";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Typography } from "@/components/ui/typography";
-import Image from "next/image";
+import { AuthButton } from "@/features/auth/AuthButton";
 
 export function Header() {
   return (
@@ -23,6 +24,7 @@ export function Header() {
 
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
+            <AuthButton />
             <ThemeToggle />
           </nav>
         </div>

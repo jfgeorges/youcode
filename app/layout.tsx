@@ -29,7 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           )}
         >
           <Providers>
-            <div className="relative flex flex-col min-h-screen">
+            <div className="relative flex min-h-screen flex-col">
               <Header />
               <div className="flex-1">{children}</div>
               <Footer />
