@@ -5,7 +5,7 @@ export default function Home() {
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>Test card</CardTitle>
+          <CardTitle>HOME</CardTitle>
         </CardHeader>
       </Card>
     </div>
