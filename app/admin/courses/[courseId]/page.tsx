@@ -59,7 +59,10 @@ export default async function CoursePage({
               </TableHeader>
               <TableBody>
                 {course.users?.map((user) => (
-                  <TableRow key={user.id}>
+                  <TableRow
+                    key={user.id}
+                    className="transition-colors hover:bg-accent"
+                  >
                     <TableCell>
                       <Avatar className="rounded">
                         <AvatarFallback>{user.email?.[0]}</AvatarFallback>

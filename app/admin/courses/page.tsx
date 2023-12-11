@@ -44,7 +44,10 @@ export default async function CoursesPage() {
               </TableHeader>
               <TableBody>
                 {courses.map((course) => (
-                  <TableRow key={course.id}>
+                  <TableRow
+                    key={course.id}
+                    className="transition-colors hover:bg-accent"
+                  >
                     <TableCell>
                       <Avatar className="rounded">
                         <AvatarFallback>{course.name[0]}</AvatarFallback>
