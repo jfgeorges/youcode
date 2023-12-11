@@ -13,7 +13,7 @@ export type PaginationButtonProps = {
 export const PaginationButton = (props: PaginationButtonProps) => {
   const router = useRouter();
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 pt-2">
       <Button
         variant="outline"
         size="sm"
