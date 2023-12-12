@@ -31,8 +31,8 @@ export const getCourses = async ({
         },
       },
     },
-    take: 6,
-    skip: Math.max(0, coursePage * 6),
+    take: 10,
+    skip: Math.max(0, coursePage * 10),
   });
 
   return courses;
