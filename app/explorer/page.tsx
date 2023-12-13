@@ -4,7 +4,7 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/components/layout/layout";
-import { getCourses } from "../courses/course.query";
+import { getCourses } from "../courses/courses.query";
 import { CourseCard } from "../courses/CourseCard";
 import { PaginationButton } from "@/features/pagination/PaginationButton";
 

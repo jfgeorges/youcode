@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Typography } from "@/components/ui/typography";
 import Link from "next/link";
-import { CoursesCard } from "./course.query";
+import { CoursesCard } from "./courses.query";
 
 export type CourseCardProps = {
   course: CoursesCard;

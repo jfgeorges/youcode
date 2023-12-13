@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export const getCourseLessons = async ({
   courseId,
@@ -9,10 +10,10 @@ export const getCourseLessons = async ({
   userId: string;
   lessonPage: number;
 }) => {
-  const courseLessons = await prisma.course.findUnique({
+  return await prisma.course.findUnique({
     where: {
-      creatorId: userId,
       id: courseId,
+      creatorId: userId,
     },
     select: {
       id: true,
@@ -20,12 +21,16 @@ export const getCourseLessons = async ({
       lessons: {
         take: 10,
         skip: Math.max(0, lessonPage * 10),
+        orderBy: {
+          rank: "asc",
+        },
         select: {
           id: true,
+          courseId: true,
           name: true,
           rank: true,
-          content: true,
           state: true,
+          content: true,
           createdAt: true,
         },
       },
@@ -36,6 +41,8 @@ export const getCourseLessons = async ({
       },
     },
   });
-
-  return courseLessons;
 };
+
+export type AdminLessonItemType = NonNullable<
+  Prisma.PromiseReturnType<typeof getCourseLessons>
+>["lessons"][number];

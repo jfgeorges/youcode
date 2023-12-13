@@ -6,20 +6,10 @@ import {
   LayoutTitle,
 } from "@/components/layout/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Typography } from "@/components/ui/typography";
 import { getRequiredAuthSession } from "@/lib/auth";
-import Link from "next/link";
 import { PaginationButton } from "../../../../../src/features/pagination/PaginationButton";
-import { getCourseLessons } from "./courseLessons.query";
-import { Badge } from "@/components/ui/badge";
+import { getCourseLessons } from "./adminLessons.query";
+import { AdminLessonItem } from "./AdminLessonItem";
 
 export default async function CourseLessonPage({
   params,
@@ -50,34 +40,10 @@ export default async function CourseLessonPage({
           <CardHeader>
             <CardTitle>{`${course?._count.lessons ?? 0} lessons`}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableHead>Name</TableHead>
-                <TableHead className="text-center">State</TableHead>
-              </TableHeader>
-              <TableBody className="">
-                {course?.lessons?.map((lesson) => (
-                  <TableRow
-                    key={lesson.id}
-                    className="transition-colors hover:bg-accent"
-                  >
-                    <TableCell>
-                      <Typography
-                        as={Link}
-                        variant="large"
-                        href={`/admin/courses/${course.id}/lessons/${lesson.id}`}
-                      >
-                        {lesson.name}
-                      </Typography>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge>{lesson.state}</Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <CardContent className="flex flex-col gap-2">
+            {course?.lessons?.map((lesson) => (
+              <AdminLessonItem key={lesson.id} lesson={lesson} />
+            ))}
             <PaginationButton
               baseUrl={`/admin/courses/${course?.id}/lessons`}
               page={page}

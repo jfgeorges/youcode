@@ -25,7 +25,6 @@ export const getCourses = async ({
       presentation: true,
       creator: {
         select: {
-          id: true,
           name: true,
           image: true,
         },
