@@ -18,7 +18,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Loader } from "@/components/ui/loader";
 import { useMutation } from "@tanstack/react-query";
 import { LogOut, User2 } from "lucide-react";
 import { Session } from "next-auth";

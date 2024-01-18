@@ -11,7 +11,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { CourseForm } from "./CourseForm";
 
-export default async function CoursePage({
+export default async function EditCoursePage({
   params,
 }: {
   params: {
@@ -40,7 +40,7 @@ export default async function CoursePage({
   return (
     <Layout>
       <LayoutHeader>
-        <LayoutTitle>Courses</LayoutTitle>
+        <LayoutTitle>Edit Course</LayoutTitle>
       </LayoutHeader>
       <LayoutContent>
         <Card className="flex-[2]">

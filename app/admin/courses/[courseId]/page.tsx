@@ -114,7 +114,7 @@ export default async function CoursePage({
               })}
             >
               Edit
-            </Link>{" "}
+            </Link>
             <Link
               href={`/admin/courses/${course.id}/lessons`}
               className={buttonVariants({
