@@ -70,4 +70,4 @@ export type CourseType = NonNullable<
   Prisma.PromiseReturnType<typeof getCourse>
 >;
 
-export type CourseLessonItem = CourseType["lessons"][0];
+export type CourseLessonItem = CourseType["lessons"][number];
