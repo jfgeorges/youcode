@@ -4,13 +4,11 @@ import { Prisma } from "@prisma/client";
 export const getCourseLessons = async ({
   courseId,
   userId,
-  lessonPage,
 }: {
   courseId: string;
   userId: string;
-  lessonPage: number;
 }) => {
-  return await prisma.course.findUnique({
+  return await prisma.course.findFirst({
     where: {
       id: courseId,
       creatorId: userId,
@@ -19,24 +17,14 @@ export const getCourseLessons = async ({
       id: true,
       name: true,
       lessons: {
-        take: 10,
-        skip: Math.max(0, lessonPage * 10),
         orderBy: {
           rank: "asc",
         },
         select: {
           id: true,
-          courseId: true,
           name: true,
-          rank: true,
           state: true,
-          content: true,
-          createdAt: true,
-        },
-      },
-      _count: {
-        select: {
-          lessons: true,
+          courseId: true,
         },
       },
     },
