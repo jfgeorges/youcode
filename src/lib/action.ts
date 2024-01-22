@@ -8,14 +8,10 @@ export class ServerError extends Error {}
 export const authenticatedAction = createSafeActionClient({
   handleReturnedServerError: (error) => {
     if (error instanceof ServerError) {
-      return {
-        serverError: error.message,
-      };
+      return error.message;
     }
 
-    return {
-      serverError: "An unexpected error occurred",
-    };
+    return "An unexpected error occurred";
   },
   middleware: async () => {
     const session = await getAuthSession();

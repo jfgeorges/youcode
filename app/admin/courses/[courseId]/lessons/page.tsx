@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { SubmitButton } from "@/components/form/SubmitButton";
 import {
   Layout,
   LayoutContent,
@@ -7,48 +8,79 @@ import {
 } from "@/components/layout/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getRequiredAuthSession } from "@/lib/auth";
-import { PaginationButton } from "../../../../../src/features/pagination/PaginationButton";
-import { getCourseLessons } from "./adminLessons.query";
+import { prisma } from "@/lib/prisma";
+import { notFound, redirect } from "next/navigation";
 import { AdminLessonItem } from "./AdminLessonItem";
+import { getCourseLessons } from "./adminLessons.query";
 
-export default async function CourseLessonPage({
+export default async function CourseLessonsPage({
   params,
-  searchParams,
 }: {
   params: {
     courseId: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const page = Number(searchParams.page ?? 0);
-
   const session = await getRequiredAuthSession();
 
   const course = await getCourseLessons({
     courseId: params.courseId,
     userId: session.user.id,
-    lessonPage: page,
   });
+
+  if (!course) {
+    notFound();
+  }
 
   return (
     <Layout>
       <LayoutHeader>
-        <LayoutTitle>{course?.name}</LayoutTitle>
+        <LayoutTitle>Lessons · {course.name}</LayoutTitle>
       </LayoutHeader>
       <LayoutContent className="flex flex-col gap-4 lg:flex-row">
         <Card className="flex-[2]">
           <CardHeader>
-            <CardTitle>{`${course?._count.lessons ?? 0} lessons`}</CardTitle>
+            <CardTitle>Lessons</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            {course?.lessons?.map((lesson) => (
+            {course.lessons.map((lesson) => (
               <AdminLessonItem key={lesson.id} lesson={lesson} />
             ))}
-            <PaginationButton
-              baseUrl={`/admin/courses/${course?.id}/lessons`}
-              page={page}
-              totalPage={Math.floor((course?._count?.lessons ?? 0) / 10)}
-            />
+            <form>
+              <SubmitButton
+                size="sm"
+                variant="secondary"
+                className="w-full"
+                formAction={async () => {
+                  "use server";
+
+                  const session = await getRequiredAuthSession();
+
+                  const courseId = params.courseId;
+
+                  // Authorize the user
+                  await prisma.course.findFirstOrThrow({
+                    where: {
+                      creatorId: session.user.id,
+                      id: courseId,
+                    },
+                  });
+
+                  const lesson = await prisma.lesson.create({
+                    data: {
+                      name: "Draft Lesson",
+                      rank: "aaaaa",
+                      state: "HIDDEN",
+                      courseId: courseId,
+                      content: "## Default content",
+                    },
+                  });
+
+                  redirect(`/admin/courses/${courseId}/lessons/${lesson.id}`);
+                }}
+              >
+                Create lesson
+              </SubmitButton>
+            </form>
           </CardContent>
         </Card>
       </LayoutContent>
