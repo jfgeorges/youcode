@@ -12,6 +12,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import { AdminLessonItem } from "./AdminLessonItem";
 import { getCourseLessons } from "./adminLessons.query";
+import { AdminLessonSortable } from "./AdminLessonSortable";
 
 export default async function CourseLessonsPage({
   params,
@@ -42,9 +43,7 @@ export default async function CourseLessonsPage({
             <CardTitle>Lessons</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            {course.lessons.map((lesson) => (
-              <AdminLessonItem key={lesson.id} lesson={lesson} />
-            ))}
+            <AdminLessonSortable lessons={course.lessons} />
             <form>
               <SubmitButton
                 size="sm"

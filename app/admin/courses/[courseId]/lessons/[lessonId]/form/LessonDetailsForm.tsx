@@ -85,7 +85,7 @@ export const LessonDetail = ({ defaultValue }: LessonDetailFormProps) => {
               </FormControl>
               <SelectContent>
                 {LESSON_STATE.map((state) => (
-                  <SelectItem value={state} className="capitalize ">
+                  <SelectItem key={state} value={state} className="capitalize ">
                     {state}
                   </SelectItem>
                 ))}

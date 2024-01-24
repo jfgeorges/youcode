@@ -212,12 +212,12 @@ const useZodForm = <Z extends ZodSchema>({
     ...formProps,
     resolver: async (data, context, options) => {
       // you can debug your validation schema here
-      console.log("-------------- RESOLVER --------------");
-      console.log("formData", data);
-      console.log(
-        "validation result",
-        await zodResolver(schema)(data, context, options)
-      );
+      // console.log("-------------- RESOLVER --------------");
+      // console.log("formData", data);
+      // console.log(
+      //   "validation result",
+      //   await zodResolver(schema)(data, context, options)
+      // );
       return zodResolver(schema)(data, context, options);
     },
   });
