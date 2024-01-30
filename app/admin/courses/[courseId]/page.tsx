@@ -6,8 +6,14 @@ import {
   LayoutTitle,
 } from "@/components/layout/layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -21,6 +27,10 @@ import { getRequiredAuthSession } from "@/lib/auth";
 import Link from "next/link";
 import { PaginationButton } from "../../../../src/features/pagination/PaginationButton";
 import { getAdminCourse } from "./admin-course.query";
+import { MoreHorizontal } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import { prisma } from "@/lib/prisma";
+import { Badge } from "@/components/ui/badge";
 
 export default async function CoursePage({
   params,
@@ -56,6 +66,8 @@ export default async function CoursePage({
               <TableHeader>
                 <TableHead>Image</TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-end">Action</TableHead>
               </TableHeader>
               <TableBody>
                 {course.users?.map((user) => (
@@ -64,15 +76,7 @@ export default async function CoursePage({
                     className="transition-colors hover:bg-accent"
                   >
                     <TableCell>
-                      <Avatar className="rounded">
-                        <AvatarFallback>{user.email?.[0]}</AvatarFallback>
-                        {user.image && (
-                          <AvatarImage
-                            src={user.image}
-                            alt={user.email ?? ""}
-                          />
-                        )}
-                      </Avatar>
+                      <UserAvatar email={user.email} image={user.image} />
                     </TableCell>
                     <TableCell>
                       <Typography
@@ -82,6 +86,65 @@ export default async function CoursePage({
                       >
                         {user.email}
                       </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">
+                        {user.canceled ? "Canceled" : "Active"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="flex flex-row-reverse">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <Button size="sm" variant="secondary">
+                            <MoreHorizontal size={16} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem asChild>
+                            <form>
+                              <button
+                                formAction={async () => {
+                                  "use server";
+
+                                  const session =
+                                    await getRequiredAuthSession();
+
+                                  const courseId = params.courseId;
+                                  const userId = user.id;
+
+                                  const courseOnUser =
+                                    await prisma.courseOnUser.findFirst({
+                                      where: {
+                                        userId,
+                                        course: {
+                                          id: courseId,
+                                          creatorId: session?.user.id,
+                                        },
+                                      },
+                                    });
+
+                                  if (!courseOnUser) return;
+
+                                  await prisma.courseOnUser.update({
+                                    where: {
+                                      id: courseOnUser.id,
+                                    },
+                                    data: {
+                                      canceledAt: courseOnUser.canceledAt
+                                        ? null
+                                        : new Date(),
+                                    },
+                                  });
+
+                                  revalidatePath(`/admin/courses/${courseId}`);
+                                }}
+                              >
+                                {user.canceled ? "Activate" : "Cancel"}
+                              </button>
+                            </form>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -129,3 +192,18 @@ export default async function CoursePage({
     </Layout>
   );
 }
+
+export type userAvatarProps = {
+  email: string;
+  image?: string;
+};
+const UserAvatar = ({ email, image }: userAvatarProps) => {
+  const avatarImage =
+    image ?? `https://api.dicebear.com/7.x/adventurer/svg?seed=${email}`;
+  return (
+    <Avatar className="rounded">
+      <AvatarFallback>{email?.[0]}</AvatarFallback>
+      <AvatarImage src={avatarImage} alt={email ?? ""} />
+    </Avatar>
+  );
+};
