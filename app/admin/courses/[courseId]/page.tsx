@@ -64,10 +64,12 @@ export default async function CoursePage({
           <CardContent>
             <Table>
               <TableHeader>
-                <TableHead>Image</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-end">Action</TableHead>
+                <TableRow>
+                  <TableHead>Image</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-end">Action</TableHead>
+                </TableRow>
               </TableHeader>
               <TableBody>
                 {course.users?.map((user) => (
@@ -94,7 +96,7 @@ export default async function CoursePage({
                     </TableCell>
                     <TableCell className="flex flex-row-reverse">
                       <DropdownMenu>
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger asChild>
                           <Button size="sm" variant="secondary">
                             <MoreHorizontal size={16} />
                           </Button>

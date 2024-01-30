@@ -14,6 +14,7 @@ export const getCourses = async ({
           users: {
             some: {
               userId,
+              canceledAt: null,
             },
           },
         }
