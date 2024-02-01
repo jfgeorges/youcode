@@ -41,6 +41,7 @@
     "lucide-react": "^0.292.0",
     "next": "14.0.2",
     "next-auth": "^4.24.5",
+    "next-mdx-remote": "^4.4.1",
     "next-safe-action": "^6.0.1",
     "next-themes": "^0.2.1",
     "react": "^18",
