@@ -25,7 +25,7 @@ export const LessonsNavigation = async (props: LessonsNavigationProps) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         {course.lessons.map((lesson) => (
-          <LessonItem lesson={lesson} />
+          <LessonItem key={lesson.id} lesson={lesson} />
         ))}
       </CardContent>
     </Card>
